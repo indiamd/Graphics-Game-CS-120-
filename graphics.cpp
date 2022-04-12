@@ -7,6 +7,7 @@
 #include <time.h>
 #include <vector>
 #include "Button.h"
+#include "Circle.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -22,6 +23,7 @@ Button mousey = Button({.5, .5, .5}, {rand() % 495 + 5, rand() % 495 + 5}, 10, 1
 Button cheese = Button({1, .7, 0}, {rand() % 495 + 5, rand() % 495 + 5}, 10, 10, "");
 vector<Quad> borders;
 vector<Button> traps;
+vector<Quad> confetti;
 
 
 void init() {
@@ -32,7 +34,36 @@ void init() {
     initCheese();
     initTraps();
     initBorders();
+    initConfetti();
 }
+
+void initConfetti(){
+    for (int i = 0; i < 150; ++i) {
+        int color = rand() % 4 + 1;
+        double r,g,b;
+        if (color == 1){
+            r = 1;
+            g = 0;
+            b = 0;
+        }
+        else if (color == 2){
+            r = 0;
+            g = 1;
+            b = 0;
+        }
+        else if (color == 3){
+            r = 0;
+            g = 0;
+            b = 1;
+        }
+        else {
+            r = 1;
+            g = 1;
+            b = 0;
+        }
+        confetti.push_back(Quad({r, g, b}, {rand() % int(width), -(rand() % int(height))}, rand() % 5 + 1, rand() % 5 + 1));
+    }
+};
 
 void initMouse(){
     mousey.getRandCoord();
@@ -120,6 +151,9 @@ void display() {
         glRasterPos2i(width/2-label.length(), height/2-label.length());
         for (const char &letter : label) {
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, letter);
+        }
+        for (Quad &c : confetti) {
+            c.draw();
         }
     }
 
@@ -220,6 +254,12 @@ void mouse(int button, int state, int x, int y) {
 }
 
 void timer(int dummy) {
+    for (Quad &c : confetti) {
+                c.move(0,5);
+                if (c.getTopY() > height) {
+                    c.move(rand() % int(width), -c.getHeight());
+                }
+            }
     glutPostRedisplay();
     glutTimerFunc(30, timer, dummy);
 }
@@ -235,7 +275,7 @@ int main(int argc, char** argv) {
     glutInitWindowSize((int)width, (int)height);
     glutInitWindowPosition(100, 200); // Position the window's initial top-left corner
     /* create the window and store the handle to it */
-    wd = glutCreateWindow("Confettify!" /* title */ );
+    wd = glutCreateWindow("Mouse and Cheese" /* title */ );
 
     // Register callback handler for window re-paint event
     glutDisplayFunc(display);

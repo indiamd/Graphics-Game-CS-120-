@@ -43,6 +43,7 @@ int Quad::getBottomY() const {
     return center.y + (height / 2);
 }
 
+
 point Quad::getCenter() const {
     return center;
 }

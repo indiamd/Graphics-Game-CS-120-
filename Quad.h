@@ -36,6 +36,7 @@ public:
     int getBottomY() const;
     point getCenter() const;
 
+
     double getRed() const;
     double getGreen() const;
     double getBlue() const;
