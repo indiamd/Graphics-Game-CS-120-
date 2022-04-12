@@ -59,9 +59,9 @@ void Button::release() {
     setColor(originalFill);
 }
 
-point Button::getRandCoord() {
+void Button::getRandCoord() {
     srand (time(NULL));
     int rand1 = rand() % 495 + 5;
     int rand2 = rand() % 495 + 5;
-    return {rand1, rand2};
+    center= {rand1, rand2};
 }

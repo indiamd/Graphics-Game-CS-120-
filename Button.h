@@ -34,7 +34,7 @@ public:
     void release();
 
     //gets random starting coordinates for buttons
-    point getRandCoord();
+    void getRandCoord();
 };
 
 

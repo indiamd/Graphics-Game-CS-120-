@@ -19,21 +19,41 @@ Screen screen = start;
 //create on-screen objects
 Button startBtn = Button({.5, .7, 1}, {250,250}, 100, 50, "Start");
 Button mousey = Button({.5, .5, .5}, {rand() % 495 + 5, rand() % 495 + 5}, 10, 10, "");
-Button cheese = Button({1, 0, .8}, {rand() % 495 + 5, rand() % 495 + 5}, 10, 10, "");
-
+Button cheese = Button({1, .7, 0}, {rand() % 495 + 5, rand() % 495 + 5}, 10, 10, "");
+vector<Quad> borders;
 vector<Button> traps;
-
-void spreadTraps() {
-    for (int i=0; i < 20; i++){
-        traps.push_back(Button({1, 0, 0}, {rand() % 490 + 10, rand() % 495 + 5}, 20, 10, "X"));
-    }
-}
 
 
 void init() {
     width = 500;
     height = 500;
     srand(time(0));
+    initMouse();
+    initCheese();
+    initTraps();
+    initBorders();
+}
+
+void initMouse(){
+    mousey.getRandCoord();
+}
+
+void initCheese(){
+    cheese.getRandCoord();
+}
+
+void initTraps(){
+    for (int i=0; i < 30; i++){
+        traps.push_back(Button({1, 0, 0}, {rand() % 490 + 10, rand() % 495 + 5}, 20, 10, "X"));
+    }
+}
+
+void initBorders(){
+    borders.push_back(Quad({0,0,0}, {10,-10}, 500, 500));
+    borders.push_back(Quad({0,0,0}, {510,10}, 500, 500));
+    borders.push_back(Quad({0,0,0}, {490,510}, 500, 500));
+    borders.push_back(Quad({0,0,0}, {-10,490}, 500, 500));
+
 }
 
 /* Initialize OpenGL Graphics */
@@ -69,15 +89,23 @@ void display() {
     else if (screen == play){
         mousey.draw();
         cheese.draw();
-        for (int i=0; i< traps.size(); i++) {
-            for (int j=0; j<i; j++){
-                while (traps[i].isOverlapping(traps[j])){
-                    traps[i].move(-10, -5);
-                }
+        /*for (int i=0; i<traps.size(); i++){
+            for (int j=0; j<i; j++)
+            while (traps[i].isOverlappingBtn(traps[j])){
+                traps[i].move(-10, -5);
             }
-            traps[i].draw();
+        }*/
+
+        for (Button &t : traps){
+            t.draw();
+            while (t.isOverlappingBtn(mousey) || t.isOverlappingBtn(cheese)){
+                t.move(10, 10);
+            }
         }
-        glutPostRedisplay();
+
+        for (Quad &b : borders){
+            b.draw();
+        }
     }
 
     else if (screen == lose){
@@ -107,10 +135,6 @@ void kbd(unsigned char key, int x, int y) {
         exit(0);
     }
 
-    if (key == 's'){
-        screen = play;
-    }
-
 
     glutPostRedisplay();
 }
@@ -118,12 +142,35 @@ void kbd(unsigned char key, int x, int y) {
 void kbdS(int key, int x, int y) {
     switch(key) {
         case GLUT_KEY_DOWN:
+            if (borders[2].getTopY()<=500) {
+                for (int i=0; i < borders.size(); i++){
+                    borders[i].move(0,5);
+                }
+            }
             break;
         case GLUT_KEY_LEFT:
+            if (borders[2].getLeftX()>=0){
+                for (int i=0; i < borders.size(); i++){
+                    borders[i].move(-5,0);
+                }
+            }
             break;
+
         case GLUT_KEY_RIGHT:
+            if (borders[0].getRightX()<=500){
+                for (int i=0; i < borders.size(); i++){
+                    borders[i].move(5,0);
+                }
+            }
             break;
+
+
         case GLUT_KEY_UP:
+            if (borders[0].getBottomY()>=0) {
+                for (int i=0; i < borders.size(); i++){
+                    borders[i].move(0,-5);
+                }
+            }
             break;
     }
 
@@ -142,7 +189,6 @@ void mouse(int button, int state, int x, int y) {
         if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && startBtn.isOverlapping(x + 0, y + 0)) {
             startBtn.pressDown();
             screen = play;
-            spreadTraps();
         } else {
             startBtn.release();
         }
@@ -174,14 +220,12 @@ void mouse(int button, int state, int x, int y) {
 }
 
 void timer(int dummy) {
-
     glutPostRedisplay();
     glutTimerFunc(30, timer, dummy);
 }
 
 /* Main function: GLUT runs as a console application starting at main()  */
 int main(int argc, char** argv) {
-
     init();
 
     glutInit(&argc, argv);          // Initialize GLUT
