@@ -13,6 +13,7 @@ Button::Button(color fill, point center, unsigned int width, unsigned int height
     pressFill = {fill.red - 0.5, fill.green - 0.5, fill.blue - 0.5};
 }
 
+
 void Button::draw() const {
     Quad::draw();
     glColor3f(0, 0, 0);
@@ -33,6 +34,16 @@ bool Button::isOverlapping(int x, int y) const {
     }
 }
 
+bool Button::isOverlappingBtn(Button &btn) const {
+    // DONE: Implement
+    if (getRightX()< btn.getLeftX() || getLeftX()> btn.getRightX() || getTopY()>btn.getBottomY() || getBottomY() > btn.getBottomY()){
+        return false;
+    }
+    else{
+        return true;
+    }
+}
+
 /* Change color of the box when the user is hovering over it */
 void Button::hover() {
     setColor(hoverFill);
@@ -46,4 +57,11 @@ void Button::pressDown() {
 /* Change the color back when the user is not clicking/hovering */
 void Button::release() {
     setColor(originalFill);
+}
+
+point Button::getRandCoord() {
+    srand (time(NULL));
+    int rand1 = rand() % 495 + 5;
+    int rand2 = rand() % 495 + 5;
+    return {rand1, rand2};
 }

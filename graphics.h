@@ -18,6 +18,8 @@
 #include <GL/glut.h>
 #endif
 
+void spreadTraps();
+
 // Program initialization NOT OpenGL/GLUT dependent,
 // as we haven't created a GLUT window yet
 void init();

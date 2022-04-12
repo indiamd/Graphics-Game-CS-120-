@@ -22,6 +22,8 @@ public:
     /* Returns true if the coordinate is inside the box */
     bool isOverlapping(int x, int y) const;
 
+    bool isOverlappingBtn(Button &btn) const;
+
     /* Change color of the Button when the user is hovering over it */
     void hover();
 
@@ -30,6 +32,9 @@ public:
 
     /* Change the color back when the user is not clicking/hovering */
     void release();
+
+    //gets random starting coordinates for buttons
+    point getRandCoord();
 };
 
 
