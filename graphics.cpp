@@ -7,7 +7,6 @@
 #include <time.h>
 #include <vector>
 #include "Button.h"
-#include "Circle.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -24,6 +23,9 @@ Button cheese = Button({1, .7, 0}, {rand() % 495 + 5, rand() % 495 + 5}, 10, 10,
 vector<Quad> borders;
 vector<Button> traps;
 vector<Quad> confetti;
+int foundMouse =0;
+int foundCheese=0;
+float timeCount = 0.00;
 
 
 void init() {
@@ -70,7 +72,7 @@ void initMouse(){
 }
 
 void initCheese(){
-    cheese.getRandCoord();
+    cheese.getRandCoord2();
 }
 
 void initTraps(){
@@ -80,10 +82,10 @@ void initTraps(){
 }
 
 void initBorders(){
-    borders.push_back(Quad({0,0,0}, {10,-10}, 500, 500));
-    borders.push_back(Quad({0,0,0}, {510,10}, 500, 500));
-    borders.push_back(Quad({0,0,0}, {490,510}, 500, 500));
-    borders.push_back(Quad({0,0,0}, {-10,490}, 500, 500));
+    borders.push_back(Quad({0,0,0}, {20,-20}, 500, 500));
+    borders.push_back(Quad({0,0,0}, {520,20}, 500, 500));
+    borders.push_back(Quad({0,0,0}, {480,520}, 500, 500));
+    borders.push_back(Quad({0,0,0}, {-20,480}, 500, 500));
 
 }
 
@@ -118,8 +120,17 @@ void display() {
     }
 
     else if (screen == play){
-        mousey.draw();
-        cheese.draw();
+        if (foundMouse == 0){
+            mousey.draw();
+
+        }
+        if (foundCheese == 0){
+            cheese.draw();
+        }
+        if (foundCheese > 0 && foundMouse >> 0){
+            screen = win;
+        }
+
         /*for (int i=0; i<traps.size(); i++){
             for (int j=0; j<i; j++)
             while (traps[i].isOverlappingBtn(traps[j])){
@@ -150,6 +161,11 @@ void display() {
         string label = "You win!";
         glRasterPos2i(width/2-label.length(), height/2-label.length());
         for (const char &letter : label) {
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, letter);
+        }
+        string label2 = "Score: " + to_string(timeCount) + " seconds";
+        glRasterPos2i(width/2-label.length(), height/2-label.length()*3+ 30);
+        for (const char &letter : label2) {
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, letter);
         }
         for (Quad &c : confetti) {
@@ -232,10 +248,18 @@ void mouse(int button, int state, int x, int y) {
     else  if (screen == play) {
         if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && mousey.isOverlapping(x + 0, y + 0)) {
             mousey.pressDown();
-            screen = win;
+            foundMouse ++;
         }
         else{
             mousey.release();
+        }
+
+        if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && cheese.isOverlapping(x + 0, y + 0)) {
+            cheese.pressDown();
+            foundCheese ++;
+        }
+        else{
+            cheese.release();
         }
 
         for (int i=0; i<traps.size(); i++) {
@@ -261,7 +285,10 @@ void timer(int dummy) {
                 }
             }
     glutPostRedisplay();
-    glutTimerFunc(30, timer, dummy);
+    glutTimerFunc(10, timer, dummy);
+    if (screen == play){
+        timeCount += .01;
+    }
 }
 
 /* Main function: GLUT runs as a console application starting at main()  */

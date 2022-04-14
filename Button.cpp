@@ -65,3 +65,10 @@ void Button::getRandCoord() {
     int rand2 = rand() % 495 + 5;
     center= {rand1, rand2};
 }
+
+void Button::getRandCoord2() {
+    srand (time(NULL));
+    int rand1 = rand() % 490 + 5;
+    int rand2 = rand() % 490 + 5;
+    center= {rand1, rand2};
+}

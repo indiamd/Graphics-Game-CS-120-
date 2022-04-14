@@ -101,5 +101,5 @@ void Quad::draw() const {
     glVertex2i(getRightX(), getTopY());
     glVertex2i(getRightX(), getBottomY());
     glEnd();
-    glFlush();
+    //glFlush();
 }
