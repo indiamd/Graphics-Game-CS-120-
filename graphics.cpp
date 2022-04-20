@@ -18,11 +18,12 @@ enum Screen{start, play, win, lose};
 Screen screen = start;
 //create on-screen objects
 Button startBtn = Button({.5, .7, 1}, {250,250}, 100, 50, "Start");
-Button mousey = Button({.5, .5, .5}, {rand() % 495 + 5, rand() % 495 + 5}, 10, 10, "");
-Button cheese = Button({1, .7, 0}, {rand() % 495 + 5, rand() % 495 + 5}, 10, 10, "");
 vector<Quad> borders;
 vector<Button> traps;
 vector<Quad> confetti;
+vector<Button> mousey;
+vector<Button> cheese;
+vector<Quad> background;
 int foundMouse =0;
 int foundCheese=0;
 float timeCount = 0.00;
@@ -37,10 +38,20 @@ void init() {
     initTraps();
     initBorders();
     initConfetti();
+    initBackground();
+}
+
+void initBackground(){
+    int cent = 24;
+    for (int i=0; i< 10; i++){
+        background.push_back(Quad({.5, .32, .22}, {cent, 250}, 48, 500));
+        background.push_back(Quad({.34, .2, .12}, {cent+25, 250}, 4, 500));
+        cent += 50;
+    }
 }
 
 void initConfetti(){
-    for (int i = 0; i < 150; ++i) {
+    for (int i = 0; i <300; ++i) {
         int color = rand() % 4 + 1;
         double r,g,b;
         if (color == 1){
@@ -68,24 +79,59 @@ void initConfetti(){
 };
 
 void initMouse(){
-    mousey.getRandCoord();
+    Button mouseyCenter= Button({.5, .5, .5}, {rand() % 495 + 5, rand() % 495 + 5}, 20, 18, "");
+    mouseyCenter.getRandCoord();
+    Button mouseyCenter2= Button({.5, .5, .5}, {mouseyCenter.getCenterX()-10, mouseyCenter.getCenterY()+2}, 15, 15, "");
+    Button mouseyCenter3= Button({.5, .5, .5}, {mouseyCenter.getCenterX()+7, mouseyCenter.getCenterY()+2}, 15, 15, "");
+    Button mouseyHead= Button({.5, .5, .5}, {mouseyCenter.getCenterX()-17, mouseyCenter.getCenterY()+2}, 8, 8, "");
+    Button mouseyTail= Button({.5, .5, .5}, {mouseyCenter.getCenterX()+16, mouseyCenter.getCenterY()+4}, 10, 2, "");
+    Button mouseyTail2= Button({.5, .5, .5}, {mouseyTail.getRightX(), mouseyTail.getCenterY()-5}, 2, 10, "");
+    Button mouseyNose= Button({0, 0, 0}, {mouseyHead.getCenterX()-6, mouseyHead.getCenterY()}, 4, 4, "");
+    Button mouseyEye= Button({1, 1, 1}, {mouseyHead.getCenterX()+3, mouseyHead.getCenterY()-2}, 4, 4, "");
+    Button mouseyEye2= Button({0, 0, 0}, {mouseyEye.getCenterX(), mouseyEye.getCenterY()}, 3, 3, "");
+    Button mouseyEar= Button({.5, .5, .5}, {mouseyCenter.getCenterX()-10, mouseyCenter.getCenterY()-8}, 8, 8, "");
+    mousey.push_back(mouseyCenter);
+    mousey.push_back(mouseyCenter2);
+    mousey.push_back(mouseyCenter3);
+    mousey.push_back(mouseyHead);
+    mousey.push_back(mouseyTail);
+    mousey.push_back(mouseyTail2);
+    mousey.push_back(mouseyNose);
+    mousey.push_back(mouseyEye);
+    mousey.push_back(mouseyEye2);
+    mousey.push_back(mouseyEar);
+
 }
 
 void initCheese(){
-    cheese.getRandCoord2();
+    Button cheeseCenter = Button({1, .7, 0}, {rand() % 495 + 5, rand() % 495 + 5}, 20, 20, "");
+    cheeseCenter.getRandCoord2();
+    Button cheeseHole1 = Button({1, 1, 1}, {cheeseCenter.getCenterX()-3, cheeseCenter.getCenterY()-3}, 5, 5, "");
+    Button cheeseHole2 = Button({1, 1, 1}, {cheeseCenter.getCenterX()+9, cheeseCenter.getCenterY()-2}, 4, 4, "");
+    Button cheeseHole3 = Button({1, 1, 1}, {cheeseCenter.getCenterX()+2, cheeseCenter.getCenterY()+5}, 6, 6, "");
+    cheese.push_back(cheeseCenter);
+    cheese.push_back(cheeseHole1);
+    cheese.push_back(cheeseHole2);
+    cheese.push_back(cheeseHole3);
 }
 
 void initTraps(){
-    for (int i=0; i < 30; i++){
-        traps.push_back(Button({1, 0, 0}, {rand() % 490 + 10, rand() % 495 + 5}, 20, 10, "X"));
+    for (int i=0; i < 50; i++){
+        traps.push_back(Button({1, 0, 0}, {rand() % 490 + 10, rand() % 495 + 5}, 20, 10, ""));
     }
 }
 
 void initBorders(){
-    borders.push_back(Quad({0,0,0}, {20,-20}, 500, 500));
-    borders.push_back(Quad({0,0,0}, {520,20}, 500, 500));
-    borders.push_back(Quad({0,0,0}, {480,520}, 500, 500));
-    borders.push_back(Quad({0,0,0}, {-20,480}, 500, 500));
+    borders.push_back(Quad({0,0,0}, {30,-30}, 500, 500));
+    borders.push_back(Quad({0,0,0}, {530,30}, 500, 500));
+    borders.push_back(Quad({0,0,0}, {470,530}, 500, 500));
+    borders.push_back(Quad({0,0,0}, {-30,470}, 500, 500));
+    borders.push_back(Quad({.35,.35,.35}, {330,250}, 44, 14));
+    borders.push_back(Quad({.2,.2,.2}, {330,250}, 44, 2));
+    borders.push_back(Quad({.2,.2,.2}, {330,245}, 44, 2));
+    borders.push_back(Quad({.2,.2,.2}, {330,255}, 44, 2));
+    borders.push_back(Quad({.35,.35,.35}, {315,250}, 17, 19));
+    borders.push_back(Quad({.1,.1,.1}, {330,250}, 8, 6));
 
 }
 
@@ -120,28 +166,32 @@ void display() {
     }
 
     else if (screen == play){
-        if (foundMouse == 0){
-            mousey.draw();
+        for (Quad &b : background){
+            b.draw();
+        }
 
+        if (foundMouse == 0){
+            for (Button &m : mousey)
+            m.draw();
         }
         if (foundCheese == 0){
-            cheese.draw();
+            for (Button &c : cheese){
+                c.draw();
+            }
         }
-        if (foundCheese > 0 && foundMouse >> 0){
+        if (foundCheese > 0 && foundMouse >> 0) {
             screen = win;
         }
 
-        /*for (int i=0; i<traps.size(); i++){
-            for (int j=0; j<i; j++)
-            while (traps[i].isOverlappingBtn(traps[j])){
-                traps[i].move(-10, -5);
-            }
-        }*/
-
         for (Button &t : traps){
             t.draw();
-            while (t.isOverlappingBtn(mousey) || t.isOverlappingBtn(cheese)){
-                t.move(10, 10);
+            /*for (Button &T : traps){
+                while (t.isOverlappingBtn(t)){
+                    t.move(-10, -5);
+                }
+            }*/
+            while (t.isOverlappingBtn(mousey[0])  || t.isOverlappingBtn(cheese[0])){
+                t.move(20, 20);
             }
         }
 
@@ -159,17 +209,20 @@ void display() {
     }
     else if (screen == win){
         string label = "You win!";
-        glRasterPos2i(width/2-label.length(), height/2-label.length());
+        glRasterPos2i(width/2-label.length()*3, height/2-label.length());
         for (const char &letter : label) {
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, letter);
         }
         string label2 = "Score: " + to_string(timeCount) + " seconds";
-        glRasterPos2i(width/2-label.length(), height/2-label.length()*3+ 30);
+        glRasterPos2i(width/2-label.length()*3, height/2-label.length()*3+ 30);
         for (const char &letter : label2) {
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, letter);
         }
         for (Quad &c : confetti) {
             c.draw();
+            if (c.getTopY() == 500){
+                c.move(0,-500);
+            }
         }
     }
 
@@ -192,14 +245,14 @@ void kbd(unsigned char key, int x, int y) {
 void kbdS(int key, int x, int y) {
     switch(key) {
         case GLUT_KEY_DOWN:
-            if (borders[2].getTopY()<=500) {
+            if (borders[2].getTopY()<=495) {
                 for (int i=0; i < borders.size(); i++){
                     borders[i].move(0,5);
                 }
             }
             break;
         case GLUT_KEY_LEFT:
-            if (borders[2].getLeftX()>=0){
+            if (borders[2].getLeftX()>=5){
                 for (int i=0; i < borders.size(); i++){
                     borders[i].move(-5,0);
                 }
@@ -207,7 +260,7 @@ void kbdS(int key, int x, int y) {
             break;
 
         case GLUT_KEY_RIGHT:
-            if (borders[0].getRightX()<=500){
+            if (borders[0].getRightX()<=495){
                 for (int i=0; i < borders.size(); i++){
                     borders[i].move(5,0);
                 }
@@ -216,7 +269,7 @@ void kbdS(int key, int x, int y) {
 
 
         case GLUT_KEY_UP:
-            if (borders[0].getBottomY()>=0) {
+            if (borders[0].getBottomY()>=5) {
                 for (int i=0; i < borders.size(); i++){
                     borders[i].move(0,-5);
                 }
@@ -246,20 +299,20 @@ void mouse(int button, int state, int x, int y) {
     }
 
     else  if (screen == play) {
-        if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && mousey.isOverlapping(x + 0, y + 0)) {
-            mousey.pressDown();
+        if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && (mousey[0].isOverlapping(x + 0, y + 0) || mousey[1].isOverlapping(x + 0, y + 0) || mousey[2].isOverlapping(x + 0, y + 0))) {
+            mousey[0].pressDown();
             foundMouse ++;
         }
         else{
-            mousey.release();
+            mousey[0].release();
         }
 
-        if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && cheese.isOverlapping(x + 0, y + 0)) {
-            cheese.pressDown();
+        if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && cheese[0].isOverlapping(x + 0, y + 0)) {
+            cheese[0].pressDown();
             foundCheese ++;
         }
         else{
-            cheese.release();
+            cheese[0].release();
         }
 
         for (int i=0; i<traps.size(); i++) {
@@ -278,17 +331,21 @@ void mouse(int button, int state, int x, int y) {
 }
 
 void timer(int dummy) {
-    for (Quad &c : confetti) {
-                c.move(0,5);
-                if (c.getTopY() > height) {
-                    c.move(rand() % int(width), -c.getHeight());
-                }
+    if (screen == win){
+        for (Quad &c : confetti) {
+            c.move(0,5);
+            if (c.getTopY() > height) {
+                c.move(rand() % int(width), -c.getHeight());
             }
-    glutPostRedisplay();
-    glutTimerFunc(10, timer, dummy);
-    if (screen == play){
-        timeCount += .01;
+        }
     }
+
+        glutPostRedisplay();
+        glutTimerFunc(10, timer, dummy);
+        if (screen == play) {
+            timeCount += .01;
+        }
+
 }
 
 /* Main function: GLUT runs as a console application starting at main()  */

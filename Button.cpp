@@ -61,14 +61,14 @@ void Button::release() {
 
 void Button::getRandCoord() {
     srand (time(NULL));
-    int rand1 = rand() % 495 + 5;
-    int rand2 = rand() % 495 + 5;
+    int rand1 = rand() % 480 + 15;
+    int rand2 = rand() % 480 + 15;
     center= {rand1, rand2};
 }
 
 void Button::getRandCoord2() {
     srand (time(NULL));
-    int rand1 = rand() % 490 + 5;
-    int rand2 = rand() % 490 + 5;
+    int rand1 = rand() % 495 + 5;
+    int rand2 = rand() % 495 + 5;
     center= {rand1, rand2};
 }
