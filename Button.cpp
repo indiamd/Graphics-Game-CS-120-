@@ -16,7 +16,7 @@ Button::Button(color fill, point center, unsigned int width, unsigned int height
 
 void Button::draw() const {
     Quad::draw();
-    glColor3f(0, 0, 0);
+    glColor3f(1, 1, 1);
     glRasterPos2i(center.x - (4 * label.length()), center.y + 7);
     for (const char &letter : label) {
         glutBitmapCharacter(GLUT_BITMAP_8_BY_13, letter);
@@ -59,6 +59,7 @@ void Button::release() {
     setColor(originalFill);
 }
 
+/*gets random coordinates for mousey center*/
 void Button::getRandCoord() {
     srand (time(NULL));
     int rand1 = rand() % 480 + 15;
@@ -66,6 +67,7 @@ void Button::getRandCoord() {
     center= {rand1, rand2};
 }
 
+/*gets random coordinates for cheese center*/
 void Button::getRandCoord2() {
     srand (time(NULL));
     int rand1 = rand() % 495 + 5;
