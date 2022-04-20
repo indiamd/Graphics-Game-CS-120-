@@ -326,7 +326,7 @@ void kbdS(int key, int x, int y) {
             //move flashlight and blackness until it reaches the edge
             if (borders[2].getTopY()<=495) {
                 for (int i=0; i < borders.size(); i++){
-                    borders[i].move(0,5);
+                    borders[i].move(0,10);
                 }
             }
             break;
@@ -334,7 +334,7 @@ void kbdS(int key, int x, int y) {
             //move flashlight and blackness until it reaches the edge
             if (borders[2].getLeftX()>=5){
                 for (int i=0; i < borders.size(); i++){
-                    borders[i].move(-5,0);
+                    borders[i].move(-10,0);
                 }
             }
             break;
@@ -343,7 +343,7 @@ void kbdS(int key, int x, int y) {
             //move flashlight and blackness until it reaches the edge
             if (borders[0].getRightX()<=495){
                 for (int i=0; i < borders.size(); i++){
-                    borders[i].move(5,0);
+                    borders[i].move(10,0);
                 }
             }
             break;
@@ -352,7 +352,7 @@ void kbdS(int key, int x, int y) {
             //move flashlight and blackness until it reaches the edge
             if (borders[0].getBottomY()>=5) {
                 for (int i=0; i < borders.size(); i++){
-                    borders[i].move(0,-5);
+                    borders[i].move(0,-10);
                 }
             }
             break;
